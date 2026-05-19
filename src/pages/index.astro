@@ -2,6 +2,23 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import logoSrcComplet from '../assets/logo-bnz-complet.png';
+import { getCollection, render } from 'astro:content';
+import ArticleModal from '../components/ArticleModal.astro';
+
+const derniersProjets = (await getCollection('projets'))
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .slice(0, 3);
+
+const derniersArticlesAvecContenu = await Promise.all(
+  (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+    .slice(0, 3)
+    .map(async (article) => ({ article, ...(await render(article)) }))
+);
+
+function formaterDate(date: Date): string {
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
 ---
 
 <Layout
@@ -118,10 +135,38 @@ import logoSrcComplet from '../assets/logo-bnz-complet.png';
         Photos avant / après — la preuve par l'image de notre savoir-faire artisanal.
       </p>
 
-      <!-- TODO : insérer les 3 derniers projets via getCollection('projets') -->
-      <div class="bg-white rounded-2xl p-12 text-center text-slate-400 border-2 border-dashed border-slate-200">
-        <p class="text-sm">⬆ Les réalisations seront affichées ici dynamiquement via la collection Markdown.</p>
-      </div>
+      {derniersProjets.length === 0 ? (
+        <p class="text-center text-slate-400">Aucune réalisation pour le moment.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {derniersProjets.map((projet) => (
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div class="relative aspect-video bg-ardoise-100">
+                <img
+                  src={projet.data.imageApres}
+                  alt={`Après rénovation — ${projet.data.title}`}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width="480"
+                  height="270"
+                />
+                <span class="absolute top-3 left-3 bg-brique-500 text-ardoise-950 text-xs font-bold px-2.5 py-1 rounded-full">
+                  APRÈS
+                </span>
+              </div>
+              <div class="p-5">
+                <div class="flex items-center gap-2 text-xs text-slate-500 mb-1.5">
+                  <span>📍 {projet.data.location}</span>
+                  <span aria-hidden="true">·</span>
+                  <time>{projet.data.date}</time>
+                </div>
+                <h3 class="font-bold text-ardoise-900 text-base leading-snug">{projet.data.title}</h3>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
 
       <div class="text-center mt-10">
         <a
@@ -146,10 +191,46 @@ import logoSrcComplet from '../assets/logo-bnz-complet.png';
         Guides pratiques, FAQ et actualités du métier de couvreur-zingueur.
       </p>
 
-      <!-- TODO : insérer les 3 derniers articles via getCollection('blog') -->
-      <div class="bg-ardoise-50 rounded-2xl p-12 text-center text-slate-400 border-2 border-dashed border-slate-200">
-        <p class="text-sm">⬆ Les derniers articles seront affichés ici dynamiquement via la collection Markdown.</p>
-      </div>
+      {derniersArticlesAvecContenu.length === 0 ? (
+        <p class="text-center text-slate-400">Aucun article pour le moment.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {derniersArticlesAvecContenu.map(({ article }) => (
+            <article
+              class="bg-ardoise-50 rounded-2xl p-6 flex flex-col hover:shadow-md transition-shadow cursor-pointer group"
+              data-open-article={article.id}
+              data-title={article.data.title}
+              data-location={article.data.location}
+              data-date={article.data.pubDate.toISOString()}
+              data-tags={JSON.stringify(article.data.tags)}
+              tabindex="0"
+              role="button"
+              aria-label={`Lire l'article : ${article.data.title}`}
+            >
+              {article.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2 mb-3">
+                  {article.data.tags.map((tag) => (
+                    <span class="bg-ardoise-100 text-ardoise-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <h3 class="font-bold text-ardoise-900 text-lg leading-snug mb-2 group-hover:text-ocean-600 transition-colors">
+                {article.data.title}
+              </h3>
+              <p class="text-slate-600 text-sm flex-1 line-clamp-2 mb-4">{article.data.description}</p>
+              <div class="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-ardoise-200">
+                <span>📍 {article.data.location}</span>
+                <time datetime={article.data.pubDate.toISOString()}>
+                  {formaterDate(article.data.pubDate)}
+                </time>
+              </div>
+              <span class="mt-3 text-ocean-600 text-sm font-semibold group-hover:underline">Lire l'article →</span>
+            </article>
+          ))}
+        </div>
+      )}
 
       <div class="text-center mt-10">
         <a
@@ -194,5 +275,16 @@ import logoSrcComplet from '../assets/logo-bnz-complet.png';
 
     </div>
   </section>
+
+  <!-- Contenu Markdown caché (pré-rendu, utilisé par le modal) -->
+  <div aria-hidden="true" class="hidden">
+    {derniersArticlesAvecContenu.map(({ article, Content }) => (
+      <div id={`article-body-${article.id}`}>
+        <Content />
+      </div>
+    ))}
+  </div>
+
+  <ArticleModal />
 
 </Layout>
