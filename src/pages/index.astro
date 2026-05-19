@@ -1,11 +1,198 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import { Image } from 'astro:assets';
+import logoSrcComplet from '../assets/logo-bnz-complet.png';
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  titre="BNZ Toitures — Couvreur-Zingueur artisan dans l'Ouest de la France"
+  description="BNZ Toitures, artisan couvreur-zingueur qualifié. Rénovation, entretien et pose de toiture à Bordeaux, en Vendée et en Bretagne. Devis gratuit. Garantie Décennale."
+>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION HÉRO
+  ═══════════════════════════════════════════ -->
+  <section
+    id="hero"
+    class="min-h-screen flex items-center justify-center hero-gradient text-white pt-16"
+  >
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 justify-center text-center py-24">
+      <a class=" flex w-auto justify-center mb-5 h-80" href="/" aria-label="BNZ Toitures — accueil">
+        <Image
+          src={logoSrcComplet}
+          alt="BNZ Toitures"
+          height={80}
+          class="w-auto"
+          loading="eager"
+        />
+      </a>
+      <p class="text-brique-400 font-semibold uppercase tracking-widest text-sm mb-4">
+        Artisan couvreur-zingueur · Bordeaux · Vendée · Bretagne
+      </p>
+
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+        Votre toiture entre<br />
+        <span class="text-brique-500">les mains d'un artisan</span>
+      </h1>
+
+      <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
+        Rénovation, pose neuve et zinguerie dans l'Ouest de la France.
+        Garantie Décennale. Devis gratuit sous 24h.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="tel:+33631295662"
+          class="inline-flex items-center justify-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-lg"
+          aria-label="Appeler BNZ Toitures"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+          </svg>
+          Appeler maintenant
+        </a>
+        <a
+          href="#services"
+          class="inline-flex items-center justify-center gap-2 border-2 border-white/60 text-white hover:bg-white hover:text-ardoise-950 font-semibold px-8 py-4 rounded-full text-lg transition-colors"
+        >
+          Nos services ↓
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION SERVICES
+  ═══════════════════════════════════════════ -->
+  <section id="services" class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <h2 class="text-3xl font-bold text-ardoise-900 text-center mb-3">Nos services</h2>
+      <p class="text-center text-slate-500 mb-16 max-w-xl mx-auto">
+        De la réfection complète à l'entretien ponctuel, nous intervenons sur tous types de couvertures.
+      </p>
+
+      <!-- TODO : compléter les descriptions et ajouter des icônes SVG -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <article class="bg-ardoise-50 rounded-2xl p-8 text-center hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-4" aria-hidden="true">🏠</div>
+          <h3 class="font-bold text-ardoise-900 text-xl mb-2">Rénovation de toiture</h3>
+          <p class="text-slate-500 text-sm">
+            <!-- TODO : texte de description -->
+            Ardoise naturelle, tuile terre cuite, tuile béton, bac acier — dépose et repose complète ou partielle.
+          </p>
+        </article>
+
+        <article class="bg-ardoise-50 rounded-2xl p-8 text-center hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-4" aria-hidden="true">⚙️</div>
+          <h3 class="font-bold text-ardoise-900 text-xl mb-2">Zinguerie</h3>
+          <p class="text-slate-500 text-sm">
+            <!-- TODO : texte de description -->
+            Gouttières, chéneaux, noues, solins, bavettes et faîtages en zinc naturel ou prépatiné.
+          </p>
+        </article>
+
+        <article class="bg-ardoise-50 rounded-2xl p-8 text-center hover:shadow-md transition-shadow">
+          <div class="text-4xl mb-4" aria-hidden="true">🔍</div>
+          <h3 class="font-bold text-ardoise-900 text-xl mb-2">Entretien & Inspection</h3>
+          <p class="text-slate-500 text-sm">
+            <!-- TODO : texte de description -->
+            Nettoyage, traitement hydrofuge, remplacement de tuiles cassées, inspection après tempête.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION RÉALISATIONS (aperçu)
+  ═══════════════════════════════════════════ -->
+  <section id="projets" class="py-24 bg-ardoise-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <h2 class="text-3xl font-bold text-ardoise-900 text-center mb-3">Nos réalisations</h2>
+      <p class="text-center text-slate-500 mb-16 max-w-xl mx-auto">
+        Photos avant / après — la preuve par l'image de notre savoir-faire artisanal.
+      </p>
+
+      <!-- TODO : insérer les 3 derniers projets via getCollection('projets') -->
+      <div class="bg-white rounded-2xl p-12 text-center text-slate-400 border-2 border-dashed border-slate-200">
+        <p class="text-sm">⬆ Les réalisations seront affichées ici dynamiquement via la collection Markdown.</p>
+      </div>
+
+      <div class="text-center mt-10">
+        <a
+          href="/projets"
+          class="inline-flex items-center gap-2 bg-ardoise-900 hover:bg-ardoise-800 text-white font-semibold px-6 py-3 rounded-full transition-colors"
+        >
+          Voir toutes les réalisations →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION BLOG / CONSEILS (aperçu)
+  ═══════════════════════════════════════════ -->
+  <section id="blog" class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <h2 class="text-3xl font-bold text-ardoise-900 text-center mb-3">Conseils & Actualités</h2>
+      <p class="text-center text-slate-500 mb-16 max-w-xl mx-auto">
+        Guides pratiques, FAQ et actualités du métier de couvreur-zingueur.
+      </p>
+
+      <!-- TODO : insérer les 3 derniers articles via getCollection('blog') -->
+      <div class="bg-ardoise-50 rounded-2xl p-12 text-center text-slate-400 border-2 border-dashed border-slate-200">
+        <p class="text-sm">⬆ Les derniers articles seront affichés ici dynamiquement via la collection Markdown.</p>
+      </div>
+
+      <div class="text-center mt-10">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 bg-ardoise-900 hover:bg-ardoise-800 text-white font-semibold px-6 py-3 rounded-full transition-colors"
+        >
+          Lire tous les articles →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION CONTACT (CTA bas de page)
+  ═══════════════════════════════════════════ -->
+  <section id="contact" class="py-24 bg-ardoise-950 text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+      <h2 class="text-3xl font-bold mb-4">Demandez un devis gratuit</h2>
+      <p class="text-slate-300 mb-10 text-lg">
+        Intervention rapide dans le Grand Ouest. Réponse garantie sous 24h.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="tel:+33631295662"
+          class="inline-flex items-center justify-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-lg"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+          </svg>
+          06 31 29 56 62
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center border-2 border-white/60 text-white hover:bg-white hover:text-ardoise-950 font-semibold px-8 py-4 rounded-full text-lg transition-colors"
+        >
+          Formulaire de contact
+        </a>
+      </div>
+
+    </div>
+  </section>
+
 </Layout>

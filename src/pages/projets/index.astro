@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const projets = await getCollection('projets');
+projets.sort((a, b) => b.data.date.localeCompare(a.data.date));
+---
+
+<Layout
+  titre="Nos Réalisations — Avant / Après"
+  description="Découvrez les réalisations de BNZ Toitures : rénovations en ardoise, tuile, zinc — photos avant et après chantier à Bordeaux, en Vendée et en Bretagne."
+>
+
+  <div class="pt-24 pb-20 bg-ardoise-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <h1 class="text-4xl font-bold text-ardoise-900 mb-3">Nos réalisations</h1>
+      <p class="text-slate-600 mb-12 text-lg max-w-2xl">
+        Photos avant / après — découvrez nos chantiers récents et la qualité du travail artisanal BNZ Toitures.
+      </p>
+
+      {projets.length === 0 ? (
+        <p class="text-slate-500">Aucune réalisation publiée pour le moment. Revenez bientôt !</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projets.map((projet) => (
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+
+              <!-- Image principale (Après) -->
+              <div class="relative aspect-video bg-ardoise-100">
+                <img
+                  src={projet.data.imageApres}
+                  alt={`Après rénovation — ${projet.data.title}`}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width="480"
+                  height="270"
+                />
+                <span class="absolute top-3 left-3 bg-brique-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                  APRÈS
+                </span>
+              </div>
+
+              <div class="p-6">
+                <div class="flex items-center gap-2 text-xs text-slate-500 mb-2">
+                  <span>📍 {projet.data.location}</span>
+                  <span aria-hidden="true">·</span>
+                  <time>{projet.data.date}</time>
+                </div>
+                <h2 class="font-bold text-ardoise-900 text-lg mb-2 leading-snug">
+                  {projet.data.title}
+                </h2>
+                <p class="text-slate-600 text-sm line-clamp-3">
+                  {projet.data.description}
+                </p>
+              </div>
+
+            </article>
+          ))}
+        </div>
+      )}
+
+      <!-- CTA devis -->
+      <div class="mt-16 text-center bg-ardoise-900 rounded-2xl py-12 px-6 text-white">
+        <h2 class="text-2xl font-bold mb-3">Votre projet ressemble à l'un de ces chantiers ?</h2>
+        <p class="text-slate-300 mb-6">Contactez-nous pour un devis gratuit et sans engagement.</p>
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-semibold px-7 py-3 rounded-full transition-colors"
+        >
+          Demander un devis →
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</Layout>

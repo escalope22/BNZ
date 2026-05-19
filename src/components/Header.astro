@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import logoSrc from '../assets/logo-bnz.png';
+
+const TELEPHONE      = '06 31 29 56 62';
+const TELEPHONE_HREF = 'tel:+33631295662';
+
+const navigation = [
+  { libelle: 'Services',      href: '/#services' },
+  { libelle: 'Réalisations',  href: '/#projets'  },
+  { libelle: 'Blog',          href: '/#blog'      },
+  { libelle: 'Contact',       href: '/contact'    },
+] as const;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-ardoise-950/95 backdrop-blur-sm shadow-md">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-30">
+
+      <!-- Logo -->
+      <a href="/" aria-label="BNZ Toitures — accueil">
+        <Image
+          src={logoSrc}
+          alt="BNZ Toitures"
+          height={70}
+          class="w-auto"
+          loading="eager"
+        />
+      </a>
+
+      <!-- Navigation desktop -->
+      <nav class="hidden md:flex items-center gap-7" aria-label="Navigation principale">
+        {navigation.map(({ libelle, href }) => (
+          <a
+            href={href}
+            class="text-lg text-slate-300 hover:text-white transition-colors duration-200 font-medium"
+          >
+            {libelle}
+          </a>
+        ))}
+      </nav>
+
+      <!-- CTA appel direct (desktop) -->
+      <a
+        href={TELEPHONE_HREF}
+        class="hidden md:inline-flex items-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-800 text-md font-bold px-5 py-2.5 rounded-full transition-colors duration-200 shadow-sm"
+        aria-label={`Appeler BNZ Toitures au ${TELEPHONE}`}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+        {TELEPHONE}
+      </a>
+
+      <!-- Bouton hamburger (mobile) -->
+      <button
+        id="btn-menu"
+        type="button"
+        class="md:hidden text-white p-2 rounded-md hover:bg-ardoise-800 transition-colors"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        aria-label="Ouvrir le menu de navigation"
+      >
+        <svg id="icone-hamburger" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icone-fermer" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Menu mobile déroulant -->
+  <nav
+    id="menu-mobile"
+    class="hidden md:hidden border-t border-ardoise-800"
+    aria-label="Navigation mobile"
+  >
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
+      {navigation.map(({ libelle, href }) => (
+        <a
+          href={href}
+          class="text-slate-300 hover:text-white py-3 border-b border-ardoise-800 last:border-0 transition-colors font-medium"
+        >
+          {libelle}
+        </a>
+      ))}
+      <a
+        href={TELEPHONE_HREF}
+        class="mt-3 flex items-center justify-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-semibold px-4 py-3 rounded-full transition-colors"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+        {TELEPHONE}
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const bouton        = document.getElementById('btn-menu');
+  const menu          = document.getElementById('menu-mobile');
+  const iconeHamburger = document.getElementById('icone-hamburger');
+  const iconeFermer   = document.getElementById('icone-fermer');
+
+  bouton?.addEventListener('click', () => {
+    const estOuvert = !menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden');
+    bouton.setAttribute('aria-expanded', String(!estOuvert));
+    iconeHamburger?.classList.toggle('hidden', !estOuvert);
+    iconeFermer?.classList.toggle('hidden', estOuvert);
+  });
+</script>

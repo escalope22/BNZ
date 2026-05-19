@@ -1,0 +1,161 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const TELEPHONE      = '06 31 29 56 62';
+const TELEPHONE_HREF = 'tel:+33631295662';
+---
+
+<Layout
+  titre="Contact — Devis gratuit"
+  description="Contactez BNZ Toitures pour un devis gratuit. Couvreur-zingueur artisan à Bordeaux, en Vendée et en Bretagne. Réponse sous 24h."
+>
+
+  <div class="pt-24 pb-20 bg-ardoise-50 min-h-screen">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <h1 class="text-4xl font-bold text-ardoise-900 mb-3">Contactez-nous</h1>
+      <p class="text-slate-600 mb-8 text-lg">
+        Décrivez votre projet et nous vous recontactons sous 24h pour un devis gratuit et sans engagement.
+      </p>
+
+      <!-- CTA appel direct -->
+      <a
+        href={TELEPHONE_HREF}
+        class="inline-flex items-center gap-3 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-xl mb-12 transition-colors shadow-md"
+        aria-label={`Appeler directement BNZ Toitures au ${TELEPHONE}`}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+        Appel direct : {TELEPHONE}
+      </a>
+
+      <!-- Formulaire de contact -->
+      <form
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 space-y-6"
+        method="POST"
+        enctype="multipart/form-data"
+        novalidate
+        aria-label="Formulaire de demande de devis"
+      >
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          <!-- Nom complet -->
+          <div>
+            <label for="nom" class="block text-sm font-semibold text-ardoise-900 mb-2">
+              Nom complet <span class="text-brique-500" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="nom"
+              name="nom"
+              required
+              autocomplete="name"
+              placeholder="Jean Dupont"
+              class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition"
+            />
+          </div>
+
+          <!-- Téléphone -->
+          <div>
+            <label for="telephone" class="block text-sm font-semibold text-ardoise-900 mb-2">
+              Téléphone <span class="text-brique-500" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="tel"
+              id="telephone"
+              name="telephone"
+              required
+              autocomplete="tel"
+              placeholder="06 XX XX XX XX"
+              class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition"
+            />
+          </div>
+
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-semibold text-ardoise-900 mb-2">
+            Adresse e-mail <span class="text-brique-500" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder="jean.dupont@exemple.fr"
+            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition"
+          />
+        </div>
+
+        <!-- Localisation -->
+        <div>
+          <label for="localisation" class="block text-sm font-semibold text-ardoise-900 mb-2">
+            Commune / Département
+          </label>
+          <input
+            type="text"
+            id="localisation"
+            name="localisation"
+            autocomplete="address-level2"
+            placeholder="Ex : Bordeaux (33), La Roche-sur-Yon (85), Rennes (35)…"
+            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition"
+          />
+        </div>
+
+        <!-- Description du projet -->
+        <div>
+          <label for="description" class="block text-sm font-semibold text-ardoise-900 mb-2">
+            Description du projet <span class="text-brique-500" aria-hidden="true">*</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            required
+            rows="5"
+            placeholder="Décrivez votre toiture et les travaux souhaités : type de couverture (ardoise, tuile, zinc…), superficie approximative, problème constaté, urgence…"
+            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition resize-y"
+          ></textarea>
+        </div>
+
+        <!-- Photos du toit -->
+        <div>
+          <label for="photos" class="block text-sm font-semibold text-ardoise-900 mb-2">
+            Photos de votre toiture
+            <span class="font-normal text-slate-400 ml-1">(facultatif)</span>
+          </label>
+          <input
+            type="file"
+            id="photos"
+            name="photos"
+            multiple
+            accept="image/*"
+            class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-ardoise-100 file:text-ardoise-900 hover:file:bg-ardoise-200 transition cursor-pointer"
+          />
+          <p class="text-xs text-slate-400 mt-1.5">
+            Formats acceptés : JPG, PNG, HEIC. 5 Mo maximum par photo.
+          </p>
+        </div>
+
+        <!-- Bouton envoyer -->
+        <button
+          type="submit"
+          class="w-full bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-sm"
+        >
+          Envoyer ma demande de devis
+        </button>
+
+        <p class="text-xs text-slate-400 text-center">
+          Champs marqués <span class="text-brique-500" aria-hidden="true">*</span> obligatoires.
+          Vos données ne sont pas partagées avec des tiers.
+        </p>
+
+      </form>
+
+    </div>
+  </div>
+
+</Layout>

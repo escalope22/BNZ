@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets';
+import logoSrc from '../assets/logo-bnz.png';
+
+const SIRET  = '938 895 059 00013';
+const EMAIL  = 'nbtoitures24@gmail.com';
+const annee  = new Date().getFullYear();
+
+const liens = [
+  { libelle: 'Accueil',      href: '/'          },
+  { libelle: 'Services',     href: '/#services'  },
+  { libelle: 'Réalisations', href: '/projets'    },
+  { libelle: 'Blog',         href: '/blog'       },
+  { libelle: 'Contact',      href: '/contact'    },
+] as const;
+---
+
+<footer class="bg-ardoise-950 text-slate-400 pt-14 pb-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
+
+      <!-- Présentation -->
+      <div>
+        <Image
+          src={logoSrc}
+          alt="BNZ Toitures"
+          height={36}
+          class="h-9 w-auto mb-3 opacity-90"
+          loading="lazy"
+        />
+        <p class="text-sm leading-relaxed">
+          Artisan couvreur-zingueur intervenant dans l'Ouest de la France : Bordeaux, Vendée et Bretagne. Devis gratuit, réponse sous 24h.
+        </p>
+      </div>
+
+      <!-- Navigation -->
+      <div>
+        <p class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Navigation</p>
+        <ul class="space-y-2.5">
+          {liens.map(({ libelle, href }) => (
+            <li>
+              <a href={href} class="text-sm hover:text-white transition-colors">
+                {libelle}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Informations légales -->
+      <div>
+        <p class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Informations légales</p>
+        <ul class="space-y-2.5 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="text-brique-500" aria-hidden="true">✓</span>
+            Garantie Décennale
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-brique-500" aria-hidden="true">✓</span>
+            Assurance RC Pro
+          </li>
+          <li>SIRET : {SIRET}</li>
+          <li>
+            <a href={`mailto:${EMAIL}`} class="hover:text-white transition-colors">
+              {EMAIL}
+            </a>
+          </li>
+          <li class="pt-1">
+            <a href="/mentions-legales" class="hover:text-white transition-colors underline underline-offset-2">
+              Mentions légales
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="border-t border-ardoise-800 pt-6 text-center text-xs text-slate-500">
+      <p>© {annee} BNZ Toitures — Tous droits réservés</p>
+    </div>
+
+  </div>
+</footer>

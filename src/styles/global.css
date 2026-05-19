@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Ardoise : vert-bleu foncé #00313D, couleur principale ── */
+  --color-ardoise-50:  #f2f8f9;
+  --color-ardoise-100: #e2f0f4;
+  --color-ardoise-200: #c3e2ea;
+  --color-ardoise-300: #94c9d6;
+  --color-ardoise-400: #5baabf;
+  --color-ardoise-500: #348da4;
+  --color-ardoise-600: #256e83;
+  --color-ardoise-700: #1a5467;
+  --color-ardoise-800: #0f3d4e;
+  --color-ardoise-900: #062c3c;
+  --color-ardoise-950: #00313D;
+
+  /* ── Ocean : bleu-teal #1E94AC, couleur logo & accents ── */
+  --color-ocean-50:  #f0f9fc;
+  --color-ocean-100: #d6f0f7;
+  --color-ocean-200: #aadeed;
+  --color-ocean-300: #73c9e3;
+  --color-ocean-400: #3bb0d2;
+  --color-ocean-500: #1E94AC;
+  --color-ocean-600: #187891;
+  --color-ocean-700: #115e71;
+  --color-ocean-800: #0c4554;
+  --color-ocean-900: #083239;
+  --color-ocean-950: #041e24;
+
+  /* ── Brique : orange chaud #FAAE6B, couleur secondaire ── */
+  --color-brique-50:  #fffaf3;
+  --color-brique-100: #fef3e0;
+  --color-brique-200: #fde4bb;
+  --color-brique-300: #fcd197;
+  --color-brique-400: #fbbd7c;
+  --color-brique-500: #FAAE6B;
+  --color-brique-600: #f2913a;
+  --color-brique-700: #d97122;
+  --color-brique-800: #b05519;
+  --color-brique-900: #863f14;
+  --color-brique-950: #4a2108;
+
+  /* ── Typographie ── */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+@keyframes bnz-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #00313D 0%, #0f3d4e 30%, #187891 60%, #00313D 100%);
+  background-size: 250% 250%;
+  animation: bnz-gradient 14s ease infinite;
+}
