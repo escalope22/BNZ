@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 const projets = await getCollection('projets');
 projets.sort((a, b) => b.data.date.localeCompare(a.data.date));
@@ -24,21 +25,29 @@ projets.sort((a, b) => b.data.date.localeCompare(a.data.date));
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projets.map((projet) => (
-            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <a href={`/projets/${projet.id}`} class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
 
-              <!-- Image principale (Après) -->
+              <!-- Images avant / après avec fondu au hover -->
               <div class="relative aspect-video bg-ardoise-100">
-                <img
+                <Image
                   src={projet.data.imageApres}
                   alt={`Après rénovation — ${projet.data.title}`}
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  width="480"
-                  height="270"
+                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100 group-hover:opacity-0"
+                  width={480}
+                  height={270}
                 />
-                <span class="absolute top-3 left-3 bg-brique-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                <Image
+                  src={projet.data.imageAvant}
+                  alt={`Avant rénovation — ${projet.data.title}`}
+                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                  width={480}
+                  height={270}
+                />
+                <span class="absolute top-3 left-3 text-white text-xs font-bold px-2.5 py-1 rounded-full transition-all duration-500 bg-brique-500 group-hover:opacity-0">
                   APRÈS
+                </span>
+                <span class="absolute top-3 left-3 text-white text-xs font-bold px-2.5 py-1 rounded-full transition-all duration-500 bg-ardoise-700 opacity-0 group-hover:opacity-100">
+                  AVANT
                 </span>
               </div>
 
@@ -56,7 +65,7 @@ projets.sort((a, b) => b.data.date.localeCompare(a.data.date));
                 </p>
               </div>
 
-            </article>
+            </a>
           ))}
         </div>
       )}

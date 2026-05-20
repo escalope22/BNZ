@@ -1,6 +1,5 @@
 ---
-import { Image } from 'astro:assets';
-import logoSrc from '../assets/logo-bnz.png';
+import logoSrc from '../assets/logo simple.svg';
 
 const TELEPHONE      = '06 31 29 56 62';
 const TELEPHONE_HREF = 'tel:+33631295662';
@@ -19,10 +18,10 @@ const navigation = [
 
       <!-- Logo -->
       <a href="/" aria-label="BNZ Toitures — accueil">
-        <Image
-          src={logoSrc}
+        <img
+          src={logoSrc.src}
           alt="BNZ Toitures"
-          height={70}
+          height="70"
           class="w-auto"
           loading="eager"
         />

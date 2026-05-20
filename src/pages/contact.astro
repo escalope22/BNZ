@@ -32,6 +32,7 @@ const TELEPHONE_HREF = 'tel:+33631295662';
 
       <!-- Formulaire de contact -->
       <form
+        id="contact-form"
         class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 space-y-6"
         method="POST"
         enctype="multipart/form-data"
@@ -142,8 +143,9 @@ const TELEPHONE_HREF = 'tel:+33631295662';
 
         <!-- Bouton envoyer -->
         <button
+          id="submit-btn"
           type="submit"
-          class="w-full bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-sm"
+          class="w-full bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
         >
           Envoyer ma demande de devis
         </button>
@@ -157,5 +159,62 @@ const TELEPHONE_HREF = 'tel:+33631295662';
 
     </div>
   </div>
+
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('contact-form');
+    var btn  = document.getElementById('submit-btn');
+    if (!form || !btn) return;
+
+    var originalBtnText = btn.textContent;
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Nettoyer les erreurs précédentes
+      var prev = document.getElementById('form-error');
+      if (prev) prev.remove();
+
+      btn.disabled = true;
+      btn.textContent = 'Envoi en cours…';
+
+      try {
+        var res  = await fetch('/api/contact', { method: 'POST', body: new FormData(form) });
+        var data = await res.json();
+
+        if (res.ok && data.success) {
+          form.innerHTML = [
+            '<div class="text-center py-10">',
+            '  <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">',
+            '    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />',
+            '  </svg>',
+            '  <h2 class="text-2xl font-bold text-ardoise-900 mb-3">Demande envoyée !</h2>',
+            '  <p class="text-slate-600">Nous vous recontacterons sous 24h. Merci de votre confiance.</p>',
+            '</div>',
+          ].join('');
+        } else {
+          showError(data.error || 'Une erreur est survenue. Veuillez réessayer.');
+          btn.disabled = false;
+          btn.textContent = originalBtnText;
+        }
+      } catch (_) {
+        showError('Connexion impossible. Vérifiez votre connexion et réessayez.');
+        btn.disabled = false;
+        btn.textContent = originalBtnText;
+      }
+    });
+
+    function showError(message) {
+      var div = document.createElement('div');
+      div.id = 'form-error';
+      div.className = 'flex items-start gap-3 bg-red-50 border border-red-200 text-red-800 rounded-xl px-4 py-3 text-sm';
+      div.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 mt-0.5 text-red-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span></span>';
+      div.querySelector('span').textContent = message;
+      btn.parentNode.insertBefore(div, btn);
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  })();
+</script>
 
 </Layout>

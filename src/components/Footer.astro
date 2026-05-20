@@ -1,6 +1,5 @@
 ---
-import { Image } from 'astro:assets';
-import logoSrc from '../assets/logo-bnz.png';
+import logoSrc from '../assets/logo simple.svg';
 
 const SIRET  = '938 895 059 00013';
 const EMAIL  = 'nbtoitures24@gmail.com';
@@ -22,10 +21,10 @@ const liens = [
 
       <!-- Présentation -->
       <div>
-        <Image
-          src={logoSrc}
+        <img
+          src={logoSrc.src}
           alt="BNZ Toitures"
-          height={36}
+          height="36"
           class="h-9 w-auto mb-3 opacity-90"
           loading="lazy"
         />

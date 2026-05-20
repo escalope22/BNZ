@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import logoSrcComplet from '../assets/logo-bnz-complet.png';
+import logoSrcComplet from '../assets/logo complet.svg';
 import { getCollection, render } from 'astro:content';
 import ArticleModal from '../components/ArticleModal.astro';
 
@@ -35,16 +35,16 @@ function formaterDate(date: Date): string {
   >
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 justify-center text-center py-24">
       <a class=" flex w-auto justify-center mb-5 h-80" href="/" aria-label="BNZ Toitures — accueil">
-        <Image
-          src={logoSrcComplet}
+        <img
+          src={logoSrcComplet.src}
           alt="BNZ Toitures"
-          height={80}
+          height="80"
           class="w-auto"
           loading="eager"
         />
       </a>
       <p class="text-brique-400 font-semibold uppercase tracking-widest text-sm mb-4">
-        Artisan couvreur-zingueur · Bordeaux · Vendée · Bretagne
+        Artisan couvreur-zingueur · Gironde · Loire atlantique · Bretagne
       </p>
 
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
@@ -140,19 +140,27 @@ function formaterDate(date: Date): string {
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {derniersProjets.map((projet) => (
-            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <a href={`/projets/${projet.id}`} class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
               <div class="relative aspect-video bg-ardoise-100">
-                <img
+                <Image
                   src={projet.data.imageApres}
                   alt={`Après rénovation — ${projet.data.title}`}
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  width="480"
-                  height="270"
+                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100 group-hover:opacity-0"
+                  width={480}
+                  height={270}
                 />
-                <span class="absolute top-3 left-3 bg-brique-500 text-ardoise-950 text-xs font-bold px-2.5 py-1 rounded-full">
+                <Image
+                  src={projet.data.imageAvant}
+                  alt={`Avant rénovation — ${projet.data.title}`}
+                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                  width={480}
+                  height={270}
+                />
+                <span class="absolute top-3 left-3 text-white text-xs font-bold px-2.5 py-1 rounded-full transition-all duration-500 bg-brique-500 group-hover:opacity-0">
                   APRÈS
+                </span>
+                <span class="absolute top-3 left-3 text-white text-xs font-bold px-2.5 py-1 rounded-full transition-all duration-500 bg-ardoise-700 opacity-0 group-hover:opacity-100">
+                  AVANT
                 </span>
               </div>
               <div class="p-5">
@@ -163,7 +171,7 @@ function formaterDate(date: Date): string {
                 </div>
                 <h3 class="font-bold text-ardoise-900 text-base leading-snug">{projet.data.title}</h3>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       )}

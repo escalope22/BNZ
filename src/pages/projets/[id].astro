@@ -1,0 +1,116 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const projets = await getCollection('projets');
+  return projets.map((projet) => ({
+    params: { id: projet.id },
+    props: { projet },
+  }));
+}
+
+const { projet } = Astro.props;
+const { Content } = await render(projet);
+
+function ytEmbedUrl(url: string): string {
+  const match = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+}
+---
+
+<Layout
+  titre={projet.data.title}
+  description={projet.data.description}
+>
+
+  <div class="pt-32 pb-20 bg-ardoise-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Fil d'ariane -->
+      <nav class="text-sm text-slate-500 mb-8 pt-8">
+        <a href="/" class="hover:text-ardoise-900 transition-colors">Accueil</a>
+        <span class="mx-2">›</span>
+        <a href="/projets" class="hover:text-ardoise-900 transition-colors">Réalisations</a>
+        <span class="mx-2">›</span>
+        <span class="text-ardoise-900">{projet.data.ariane}</span>
+      </nav>
+
+      <!-- En-tête -->
+      <h1 class="text-3xl sm:text-4xl font-bold text-ardoise-900 mb-3">{projet.data.title}</h1>
+      <div class="flex items-center gap-3 text-sm text-slate-500 mb-10">
+        <span>📍 {projet.data.location}</span>
+        <span aria-hidden="true">·</span>
+        <time>{projet.data.date}</time>
+      </div>
+
+      <!-- Comparaison avant / après -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+
+        <div class="relative rounded-2xl overflow-hidden aspect-video bg-ardoise-100">
+          <Image
+            src={projet.data.imageAvant}
+            alt={`Avant rénovation — ${projet.data.title}`}
+            class="w-full h-full object-cover"
+            width={720}
+            height={405}
+          />
+          <span class="absolute top-3 left-3 bg-ardoise-700 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+            AVANT
+          </span>
+        </div>
+
+        <div class="relative rounded-2xl overflow-hidden aspect-video bg-ardoise-100">
+          <Image
+            src={projet.data.imageApres}
+            alt={`Après rénovation — ${projet.data.title}`}
+            class="w-full h-full object-cover"
+            width={720}
+            height={405}
+          />
+          <span class="absolute top-3 left-3 bg-brique-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+            APRÈS
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Contenu Markdown -->
+      <div class="article-prose mb-14">
+        <Content />
+      </div>
+
+      <!-- Vidéo YouTube (optionnel) -->
+      {projet.data.lienYT && (
+        <div class="mb-14">
+          <h2 class="text-xl font-bold text-ardoise-900 mb-4">Vidéo de la réalisation</h2>
+          <div class="relative aspect-video rounded-2xl overflow-hidden bg-ardoise-100">
+            <iframe
+              src={ytEmbedUrl(projet.data.lienYT)}
+              title={`Vidéo — ${projet.data.title}`}
+              class="absolute inset-0 w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            />
+          </div>
+        </div>
+      )}
+
+      <!-- CTA -->
+      <div class="bg-ardoise-900 rounded-2xl py-10 px-6 text-white text-center">
+        <h2 class="text-xl font-bold mb-2">Un projet similaire ?</h2>
+        <p class="text-slate-300 mb-6 text-sm">Devis gratuit, réponse sous 24h.</p>
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-semibold px-6 py-3 rounded-full transition-colors"
+        >
+          Demander un devis →
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</Layout>
