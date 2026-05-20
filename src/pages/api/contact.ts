@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
   const description = formData.get('description')?.toString().trim() ?? '';
   const localisation = formData.get('localisation')?.toString().trim() ?? '';
 
-  if (!nom || !telephone || !email || !description) {
+  if (!nom || !email || !description || !localisation) {
     return json({ error: 'Veuillez remplir tous les champs obligatoires.' }, 400);
   }
 

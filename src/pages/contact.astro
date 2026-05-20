@@ -63,13 +63,13 @@ const TELEPHONE_HREF = 'tel:+33631295662';
           <!-- Téléphone -->
           <div>
             <label for="telephone" class="block text-sm font-semibold text-ardoise-900 mb-2">
-              Téléphone <span class="text-brique-500" aria-hidden="true">*</span>
+                Téléphone
+              <span class="font-normal text-slate-400 ml-1">(facultatif)</span>
             </label>
             <input
               type="tel"
               id="telephone"
               name="telephone"
-              required
               autocomplete="tel"
               placeholder="06 XX XX XX XX"
               class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition"
@@ -97,12 +97,13 @@ const TELEPHONE_HREF = 'tel:+33631295662';
         <!-- Localisation -->
         <div>
           <label for="localisation" class="block text-sm font-semibold text-ardoise-900 mb-2">
-            Commune / Département
+            Commune / Département <span class="text-brique-500" aria-hidden="true">*</span>
           </label>
           <input
             type="text"
             id="localisation"
             name="localisation"
+            required
             autocomplete="address-level2"
             placeholder="Ex : Bordeaux (33), La Roche-sur-Yon (85), Rennes (35)…"
             class="w-full border border-slate-200 rounded-xl px-4 py-3 text-ardoise-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brique-500 focus:border-transparent transition"
@@ -147,7 +148,7 @@ const TELEPHONE_HREF = 'tel:+33631295662';
         <button
           id="submit-btn"
           type="submit"
-          class="w-full bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+          class="w-full bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-sm sm:text-lg transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
         >
           Envoyer ma demande de devis
         </button>
