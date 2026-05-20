@@ -1,14 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import ArticleModal from '../../components/ArticleModal.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 const articles = await getCollection('blog', ({ data }) => !data.draft);
 articles.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-
-const articlesAvecContenu = await Promise.all(
-  articles.map(async (article) => ({ article, ...(await render(article)) }))
-);
 
 function formaterDate(date: Date): string {
   return date.toLocaleDateString('fr-FR', {
@@ -32,21 +27,14 @@ function formaterDate(date: Date): string {
         Guides pratiques, questions fréquentes et actualités du métier de couvreur-zingueur.
       </p>
 
-      {articlesAvecContenu.length === 0 ? (
+      {articles.length === 0 ? (
         <p class="text-slate-500">Aucun article publié pour le moment. Revenez bientôt !</p>
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articlesAvecContenu.map(({ article }) => (
-            <article
-              class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col cursor-pointer group"
-              data-open-article={article.id}
-              data-title={article.data.title}
-              data-location={article.data.location}
-              data-date={article.data.pubDate.toISOString()}
-              data-tags={JSON.stringify(article.data.tags)}
-              tabindex="0"
-              role="button"
-              aria-label={`Lire l'article : ${article.data.title}`}
+          {articles.map((article) => (
+            <a
+              href={`/blog/${article.id}`}
+              class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group"
             >
               <div class="p-6 flex flex-col flex-1">
 
@@ -80,23 +68,12 @@ function formaterDate(date: Date): string {
                 </span>
 
               </div>
-            </article>
+            </a>
           ))}
         </div>
       )}
 
     </div>
   </div>
-
-  <!-- Contenu Markdown caché (pré-rendu, utilisé par le modal) -->
-  <div aria-hidden="true" class="hidden">
-    {articlesAvecContenu.map(({ article, Content }) => (
-      <div id={`article-body-${article.id}`}>
-        <Content />
-      </div>
-    ))}
-  </div>
-
-  <ArticleModal />
 
 </Layout>

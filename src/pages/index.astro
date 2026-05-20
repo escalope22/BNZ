@@ -2,19 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import logoSrcComplet from '../assets/logo complet.svg';
-import { getCollection, render } from 'astro:content';
-import ArticleModal from '../components/ArticleModal.astro';
+import { getCollection } from 'astro:content';
 
 const derniersProjets = (await getCollection('projets'))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
   .slice(0, 3);
 
-const derniersArticlesAvecContenu = await Promise.all(
-  (await getCollection('blog', ({ data }) => !data.draft))
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-    .slice(0, 3)
-    .map(async (article) => ({ article, ...(await render(article)) }))
-);
+const derniersArticles = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
 
 function formaterDate(date: Date): string {
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -199,21 +195,14 @@ function formaterDate(date: Date): string {
         Guides pratiques, FAQ et actualités du métier de couvreur-zingueur.
       </p>
 
-      {derniersArticlesAvecContenu.length === 0 ? (
+      {derniersArticles.length === 0 ? (
         <p class="text-center text-slate-400">Aucun article pour le moment.</p>
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {derniersArticlesAvecContenu.map(({ article }) => (
-            <article
-              class="bg-ardoise-50 rounded-2xl p-6 flex flex-col hover:shadow-md transition-shadow cursor-pointer group"
-              data-open-article={article.id}
-              data-title={article.data.title}
-              data-location={article.data.location}
-              data-date={article.data.pubDate.toISOString()}
-              data-tags={JSON.stringify(article.data.tags)}
-              tabindex="0"
-              role="button"
-              aria-label={`Lire l'article : ${article.data.title}`}
+          {derniersArticles.map((article) => (
+            <a
+              href={`/blog/${article.id}`}
+              class="bg-ardoise-50 rounded-2xl p-6 flex flex-col hover:shadow-md transition-shadow group"
             >
               {article.data.tags.length > 0 && (
                 <div class="flex flex-wrap gap-2 mb-3">
@@ -235,7 +224,7 @@ function formaterDate(date: Date): string {
                 </time>
               </div>
               <span class="mt-3 text-ocean-600 text-sm font-semibold group-hover:underline">Lire l'article →</span>
-            </article>
+            </a>
           ))}
         </div>
       )}
@@ -284,15 +273,5 @@ function formaterDate(date: Date): string {
     </div>
   </section>
 
-  <!-- Contenu Markdown caché (pré-rendu, utilisé par le modal) -->
-  <div aria-hidden="true" class="hidden">
-    {derniersArticlesAvecContenu.map(({ article, Content }) => (
-      <div id={`article-body-${article.id}`}>
-        <Content />
-      </div>
-    ))}
-  </div>
-
-  <ArticleModal />
 
 </Layout>

@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('blog', ({ data }) => !data.draft);
+  return articles.map((article) => ({
+    params: { id: article.id },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+
+function formaterDate(date: Date): string {
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+<Layout
+  titre={article.data.title}
+  description={article.data.description}
+>
+
+  <div class="pt-32 pb-20 bg-ardoise-50 min-h-screen">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Fil d'ariane -->
+      <nav class="text-sm text-slate-500 mb-8 pt-8">
+        <a href="/" class="hover:text-ardoise-900 transition-colors">Accueil</a>
+        <span class="mx-2">›</span>
+        <a href="/blog" class="hover:text-ardoise-900 transition-colors">Blog</a>
+        <span class="mx-2">›</span>
+        <span class="text-ardoise-900">{article.data.title}</span>
+      </nav>
+
+      <!-- Tags -->
+      {article.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-4">
+          {article.data.tags.map((tag) => (
+            <span class="bg-ardoise-100 text-ardoise-700 text-xs font-medium px-2.5 py-1 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <!-- En-tête -->
+      <h1 class="text-3xl sm:text-4xl font-bold text-ardoise-900 mb-3">{article.data.title}</h1>
+      <div class="flex items-center gap-3 text-sm text-slate-500 mb-10">
+        <span>📍 {article.data.location}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={article.data.pubDate.toISOString()}>
+          {formaterDate(article.data.pubDate)}
+        </time>
+      </div>
+
+      <!-- Contenu Markdown -->
+      <div class="article-prose mb-14">
+        <Content />
+      </div>
+
+      <!-- CTA -->
+      <div class="bg-ardoise-900 rounded-2xl py-10 px-6 text-white text-center">
+        <h2 class="text-xl font-bold mb-2">Besoin d'un artisan couvreur ?</h2>
+        <p class="text-slate-300 mb-6 text-sm">Devis gratuit, réponse sous 24h.</p>
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-semibold px-6 py-3 rounded-full transition-colors"
+        >
+          Demander un devis →
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</Layout>

@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { SpeedInsights } from '@vercel/speed-insights/astro';
 import '../styles/global.css';
 
 interface Props {
@@ -63,5 +64,6 @@ const urlImage      = new URL(image, Astro.url).href;
     </main>
 
     <Footer />
+    <SpeedInsights />
   </body>
 </html>

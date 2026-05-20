@@ -48,33 +48,108 @@ function ytEmbedUrl(url: string): string {
       <!-- Comparaison avant / après -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
 
-        <div class="relative rounded-2xl overflow-hidden aspect-video bg-ardoise-100">
-          <Image
-            src={projet.data.imageAvant}
+        <button
+          class="relative rounded-2xl overflow-hidden aspect-video bg-ardoise-100 cursor-zoom-in group/lb block w-full text-left"
+          data-lightbox-src={projet.data.imageAvant.src}
+          data-lightbox-label="AVANT"
+          aria-label="Agrandir la photo avant rénovation"
+        >
+          <img
+            src={projet.data.imageAvant.src}
             alt={`Avant rénovation — ${projet.data.title}`}
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover/lb:scale-105"
             width={720}
             height={405}
           />
           <span class="absolute top-3 left-3 bg-ardoise-700 text-white text-xs font-bold px-2.5 py-1 rounded-full">
             AVANT
           </span>
-        </div>
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/lb:opacity-100 transition-opacity duration-200">
+            <span class="bg-black/50 text-white text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">🔍 Agrandir</span>
+          </span>
+        </button>
 
-        <div class="relative rounded-2xl overflow-hidden aspect-video bg-ardoise-100">
-          <Image
-            src={projet.data.imageApres}
+        <button
+          class="relative rounded-2xl overflow-hidden aspect-video bg-ardoise-100 cursor-zoom-in group/lb block w-full text-left"
+          data-lightbox-src={projet.data.imageApres.src}
+          data-lightbox-label="APRÈS"
+          aria-label="Agrandir la photo après rénovation"
+        >
+          <img
+            src={projet.data.imageApres.src}
             alt={`Après rénovation — ${projet.data.title}`}
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover/lb:scale-105"
             width={720}
             height={405}
           />
           <span class="absolute top-3 left-3 bg-brique-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
             APRÈS
           </span>
-        </div>
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/lb:opacity-100 transition-opacity duration-200">
+            <span class="bg-black/50 text-white text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">🔍 Agrandir</span>
+          </span>
+        </button>
 
       </div>
+
+      <!-- Lightbox -->
+      <div
+        id="lightbox"
+        class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Photo agrandie"
+      >
+        <button
+          id="lightbox-close"
+          class="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+          aria-label="Fermer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <span id="lightbox-label" class="absolute top-4 left-4 text-white text-xs font-bold px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm"></span>
+        <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" />
+      </div>
+
+      <script>
+        const lightbox = document.getElementById('lightbox')!;
+        const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+        const lightboxLabel = document.getElementById('lightbox-label')!;
+
+        function openLightbox(src: string, label: string, alt: string) {
+          lightboxImg.src = src;
+          lightboxImg.alt = alt;
+          lightboxLabel.textContent = label;
+          lightbox.classList.remove('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+          lightbox.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll<HTMLButtonElement>('[data-lightbox-src]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const src = btn.dataset.lightboxSrc!;
+            const label = btn.dataset.lightboxLabel!;
+            const alt = btn.querySelector('img')?.alt ?? '';
+            openLightbox(src, label, alt);
+          });
+        });
+
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) closeLightbox();
+        });
+
+        document.getElementById('lightbox-close')!.addEventListener('click', closeLightbox);
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeLightbox();
+        });
+      </script>
 
       <!-- Contenu Markdown -->
       <div class="article-prose mb-14">
