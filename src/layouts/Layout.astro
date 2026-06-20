@@ -52,6 +52,11 @@ const urlImage      = new URL(image, Astro.url).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image"       content={urlImage} />
 
+    <!-- Typographie serif haut de gamme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+
     <!-- Slot head : pour injecter des scripts/styles supplémentaires par page -->
     <slot name="head" />
   </head>
