@@ -3,7 +3,7 @@ title: "Création d'un couloir en zinc avec main courante — Tuiles Marseille M
 ariane: "Zinguerie sur tuile Marseille"
 location: "Gironde"
 date: "2026-08"
-imageAvant: "./photos/couloir-zinc/apres.png"
+imageAvant: "./photos/couloir-zinc/avant.jpeg"
 imageApres: "./photos/couloir-zinc/apres.png"
 description: "Mise en place d'un couloir d'étanchéité sur mesure en zinc avec pose d'une main courante en zinc façonnée pour assurer une finition parfaite et une étanchéité durable sur couverture en tuiles Marseille Monier."
 # lienYT: ""
