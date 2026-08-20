@@ -17,7 +17,6 @@ Dans le cadre d'un projet d'amélioration du confort thermique et de la luminosi
 - Dépose soignée de l'ancienne fenêtre de toit et récupération des finitions
 - Contrôle et préparation de la chevêtre de charpente
 - Pose d'une fenêtre de toit Velux grand format (94×160 cm)
-- Installation du collerette d'isolation périphérique et de l'écran sous-toiture
 - Raccordement d'étanchéité complet adapté à la couverture
 - Habillage intérieur et vérification du bon fonctionnement du mécanisme
 

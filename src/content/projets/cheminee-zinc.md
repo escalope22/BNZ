@@ -14,7 +14,7 @@ Intervention pour supprimer une ancienne souche de cheminée devenue inutile et 
 ## Travaux réalisés
 
 - Dépose complète et méthodique de la souche de cheminée en toiture
-- Évacuation des gravois et matériaux en déchèterie
+- Évacuation des gravats et matériaux en déchèterie
 - Consolidation et reprise du voligeage / charpente au niveau de l'ancienne trémie
 - Façonnage sur mesure et pose d'un couloir en zinc pour le raccordement et l'étanchéité
 - Repose des éléments de couverture et vérification des écoulements d'eau pluviale
