@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import logoSrcComplet from '../assets/logo complet.svg';
 import { getCollection } from 'astro:content';
+import { NOM_SITE, TELEPHONE_E164, urlAbsolue } from '../lib/seo';
 
 const derniersProjets = (await getCollection('projets'))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
@@ -15,11 +16,34 @@ const derniersArticles = (await getCollection('blog', ({ data }) => !data.draft)
 function formaterDate(date: Date): string {
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
+
+const COMMUNES_DESSERVIES = [
+  'Blaye', 'Bourg', 'Saint-André-de-Cubzac', 'Saint-Savin', 'Saint-Ciers-sur-Gironde',
+  'Pugnac', 'Coutras', 'Guîtres', 'Montendre', 'Mirambeau',
+];
+
+const donneesStructurees = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'RoofingContractor',
+    name: NOM_SITE,
+    telephone: TELEPHONE_E164,
+    url: urlAbsolue('/', Astro.site),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Blaye',
+      postalCode: '33390',
+      addressCountry: 'FR',
+    },
+    areaServed: COMMUNES_DESSERVIES.map((commune) => ({ '@type': 'City', name: commune })),
+  },
+];
 ---
 
 <Layout
-  titre="BNZ Toitures — Couvreur-Zingueur artisan dans le Grand Ouest"
-  description="BNZ Toitures réalise vos projets de rénovation d'excellence et de zinguerie sur-mesure dans le Grand Ouest. Diagnostic d'expert, compagnons locaux qualifiés, Garantie Décennale."
+  titre="Couvreur zingueur à Blaye et en Haute-Gironde"
+  description="Couvreur zingueur à Blaye : rénovation de toiture et zinguerie sur-mesure en Haute-Gironde et sud Charente-Maritime. Diagnostic sur site, garantie décennale."
+  donneesStructurees={donneesStructurees}
 >
 
   <!-- ═══════════════════════════════════════════
@@ -40,12 +64,12 @@ function formaterDate(date: Date): string {
         />
       </a>
       <p class="text-brique-400 font-semibold uppercase tracking-widest text-sm mb-4">
-        Artisan couvreur-zingueur · Gironde · Loire Atlantique · Bretagne
+        Artisan couvreur-zingueur · Blaye · Haute-Gironde · Sud Charente-Maritime
       </p>
 
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif mb-6 leading-tight">
         L'art de la toiture et du zinc<br />
-        <span class="text-brique-500">dans le Grand Ouest.</span>
+        <span class="text-brique-500">à Blaye et en Haute-Gironde.</span>
       </h1>
 
       <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-10">

@@ -1,5 +1,5 @@
 ---
-title: "Quelle est la durée de vie d'une gouttiere en zinc en Bretagne ?"
+title: "Quelle est la durée de vie d'une gouttière en zinc en Bretagne ?"
 description: "Une gouttière en zinc peut-elle résister au climat breton ? Découvrez sa durée de vie réelle et nos conseils d'artisan zingueur."
 pubDate: 2026-05-19
 location: "Bretagne"

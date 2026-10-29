@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { urlAbsolue, filAriane } from '../../lib/seo';
 
 const articles = await getCollection('blog', ({ data }) => !data.draft);
 articles.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
@@ -12,11 +13,19 @@ function formaterDate(date: Date): string {
     year: 'numeric',
   });
 }
+
+const donneesStructurees = [
+  filAriane([
+    { nom: 'Accueil', url: urlAbsolue('/', Astro.site) },
+    { nom: 'Blog', url: urlAbsolue('/blog', Astro.site) },
+  ]),
+];
 ---
 
 <Layout
   titre="Blog — Conseils toiture et zinguerie"
   description="Articles et conseils pratiques sur la toiture, la zinguerie et l'entretien de couverture par BNZ Toitures, artisan couvreur dans l'Ouest de la France."
+  donneesStructurees={donneesStructurees}
 >
 
   <div class="pt-20 md:pt-28 pb-20 bg-ardoise-50 min-h-screen">

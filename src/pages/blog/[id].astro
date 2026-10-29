@@ -1,26 +1,88 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import {
+  NOM_SITE, IMAGE_DEFAUT, AUTEUR,
+  urlAbsolue, filAriane, extraireFaq,
+} from '../../lib/seo';
 
 export async function getStaticPaths() {
   const articles = await getCollection('blog', ({ data }) => !data.draft);
   return articles.map((article) => ({
     params: { id: article.id },
-    props: { article },
+    props: { article, autresArticles: articles.filter((a) => a.id !== article.id) },
   }));
 }
 
-const { article } = Astro.props;
+const { article, autresArticles } = Astro.props;
 const { Content } = await render(article);
 
 function formaterDate(date: Date): string {
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// Articles liés : priorité aux tags communs, puis aux plus récents
+const tagsArticle = new Set(article.data.tags.map((tag) => tag.toLowerCase()));
+const articlesLies = autresArticles
+  .map((autre) => ({
+    autre,
+    tagsCommuns: autre.data.tags.filter((tag) => tagsArticle.has(tag.toLowerCase())).length,
+  }))
+  .sort((a, b) =>
+    b.tagsCommuns - a.tagsCommuns ||
+    b.autre.data.pubDate.getTime() - a.autre.data.pubDate.getTime())
+  .slice(0, 3)
+  .map(({ autre }) => autre);
+
+// Données structurées
+const urlAccueil = urlAbsolue('/', Astro.site);
+const urlBlog    = urlAbsolue('/blog', Astro.site);
+const urlArticle = urlAbsolue(`/blog/${article.id}`, Astro.site);
+const dateMaj    = article.data.updatedDate ?? article.data.pubDate;
+
+const donneesStructurees: object[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.data.title,
+    description: article.data.description,
+    datePublished: article.data.pubDate.toISOString(),
+    dateModified: dateMaj.toISOString(),
+    image: [new URL(IMAGE_DEFAUT, Astro.site).href],
+    mainEntityOfPage: { '@type': 'WebPage', '@id': urlArticle },
+    author: {
+      '@type': 'Person',
+      name: AUTEUR,
+      worksFor: { '@type': 'Organization', name: NOM_SITE, url: urlAccueil },
+    },
+    publisher: { '@type': 'Organization', name: NOM_SITE, url: urlAccueil },
+  },
+  filAriane([
+    { nom: 'Accueil', url: urlAccueil },
+    { nom: 'Blog', url: urlBlog },
+    { nom: article.data.title, url: urlArticle },
+  ]),
+];
+
+const faq = extraireFaq(article.body ?? '');
+if (faq.length > 0) {
+  donneesStructurees.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ question, reponse }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: reponse },
+    })),
+  });
 }
 ---
 
 <Layout
   titre={article.data.title}
   description={article.data.description}
+  typeOg="article"
+  donneesStructurees={donneesStructurees}
 >
 
   <div class="pt-20 md:pt-28 pb-20 bg-ardoise-50 min-h-screen">
@@ -48,12 +110,23 @@ function formaterDate(date: Date): string {
 
       <!-- En-tête -->
       <h1 class="text-3xl sm:text-4xl font-bold text-ardoise-900 mb-3">{article.data.title}</h1>
-      <div class="flex items-center gap-3 text-sm text-slate-500 mb-10">
+      <div class="flex flex-wrap items-center gap-3 text-sm text-slate-500 mb-10">
         <span>📍 {article.data.location}</span>
         <span aria-hidden="true">·</span>
         <time datetime={article.data.pubDate.toISOString()}>
           {formaterDate(article.data.pubDate)}
         </time>
+        {article.data.updatedDate && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>
+              Mis à jour le{' '}
+              <time datetime={article.data.updatedDate.toISOString()}>
+                {formaterDate(article.data.updatedDate)}
+              </time>
+            </span>
+          </>
+        )}
       </div>
 
       <!-- Contenu Markdown -->
@@ -61,17 +134,57 @@ function formaterDate(date: Date): string {
         <Content />
       </div>
 
+      <!-- Auteur -->
+      <aside class="flex items-center gap-4 bg-white rounded-2xl p-6 mb-10 shadow-sm" aria-label="Auteur de l'article">
+        <div class="flex-shrink-0 w-12 h-12 bg-ardoise-900 rounded-full flex items-center justify-center text-brique-400 font-bold text-lg font-serif" aria-hidden="true">
+          B
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-widest text-slate-500 mb-1">Rédigé par</p>
+          <p class="font-bold text-ardoise-900">Benjamin, couvreur zingueur à Blaye</p>
+        </div>
+      </aside>
+
       <!-- CTA -->
       <div class="bg-ardoise-900 rounded-2xl py-10 px-6 text-white text-center">
         <h2 class="text-xl font-bold mb-2">Besoin d'un artisan couvreur ?</h2>
         <p class="text-slate-300 mb-6 text-sm">Devis gratuit, réponse sous 24h.</p>
-        <a
-          href="/contact"
-          class="inline-flex items-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-semibold px-6 py-3 rounded-full transition-colors"
-        >
-          Demander un devis →
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <a
+            href="/contact"
+            class="inline-flex items-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-semibold px-6 py-3 rounded-full transition-colors"
+          >
+            Demander un devis →
+          </a>
+          <a
+            href="tel:+33631295662"
+            class="inline-flex items-center gap-2 border-2 border-white/60 text-white hover:bg-white hover:text-ardoise-950 font-semibold px-6 py-3 rounded-full transition-colors"
+          >
+            Appeler le 06 31 29 56 62
+          </a>
+        </div>
       </div>
+
+      <!-- Articles liés -->
+      {articlesLies.length > 0 && (
+        <section class="mt-14" aria-labelledby="articles-lies">
+          <h2 id="articles-lies" class="text-2xl font-bold text-ardoise-900 mb-6">Articles liés</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articlesLies.map((lie) => (
+              <a
+                href={`/blog/${lie.id}`}
+                class="bg-white rounded-2xl p-5 flex flex-col shadow-sm hover:shadow-md transition-shadow group"
+              >
+                <h3 class="font-bold text-ardoise-900 leading-snug mb-2 group-hover:text-ocean-600 transition-colors">
+                  {lie.data.title}
+                </h3>
+                <p class="text-slate-600 text-sm flex-1 line-clamp-3 mb-3">{lie.data.description}</p>
+                <span class="text-ocean-600 text-sm font-semibold group-hover:underline">Lire l'article →</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
     </div>
   </div>

@@ -3,23 +3,27 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 import '../styles/global.css';
+import { NOM_SITE, IMAGE_DEFAUT, urlAbsolue, serialiserJsonLd } from '../lib/seo';
 
 interface Props {
-  titre:       string;
-  description: string;
-  image?:      string;
+  titre:                string;
+  description:          string;
+  image?:               string;
+  typeOg?:              'website' | 'article';
+  donneesStructurees?:  object[];
 }
 
 const {
   titre,
   description,
-  image = '/og-default.jpg',
+  image = IMAGE_DEFAUT,
+  typeOg = 'website',
+  donneesStructurees = [],
 } = Astro.props;
 
-const NOM_SITE      = 'BNZ Toitures';
 const titreComplet  = titre === NOM_SITE ? titre : `${titre} | ${NOM_SITE}`;
-const urlCanonique  = Astro.url.href;
-const urlImage      = new URL(image, Astro.url).href;
+const urlCanonique  = urlAbsolue(Astro.url.pathname, Astro.site);
+const urlImage      = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
@@ -38,7 +42,7 @@ const urlImage      = new URL(image, Astro.url).href;
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->
-    <meta property="og:type"        content="website" />
+    <meta property="og:type"        content={typeOg} />
     <meta property="og:url"         content={urlCanonique} />
     <meta property="og:title"       content={titreComplet} />
     <meta property="og:description" content={description} />
@@ -51,6 +55,11 @@ const urlImage      = new URL(image, Astro.url).href;
     <meta name="twitter:title"       content={titreComplet} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image"       content={urlImage} />
+
+    <!-- Données structurées -->
+    {donneesStructurees.map((donnees) => (
+      <script type="application/ld+json" set:html={serialiserJsonLd(donnees)} />
+    ))}
 
     <!-- Typographie serif haut de gamme -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
