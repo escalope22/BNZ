@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  titre="Page introuvable"
+  description="Cette page n'existe pas ou a été déplacée. Retrouvez BNZ Toitures, couvreur zingueur à Blaye et en Haute-Gironde."
+  indexable={false}
+>
+
+  <section class="min-h-screen flex items-center justify-center hero-gradient text-white pt-14 md:pt-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24">
+
+      <!-- Petit toit stylisé, dont une tuile s'est envolée -->
+      <svg class="mx-auto mb-8 h-24 w-auto" viewBox="0 0 120 64" fill="none" aria-hidden="true">
+        <path d="M8 56 L60 12 L112 56" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="text-brique-500" />
+        <rect x="88" y="4" width="16" height="9" rx="2" transform="rotate(25 96 8)" class="fill-brique-400" />
+      </svg>
+
+      <p class="text-brique-400 font-semibold uppercase tracking-widest text-sm mb-4">Erreur 404</p>
+
+      <h1 class="text-4xl sm:text-5xl font-bold font-serif mb-6 leading-tight">
+        Il manque une tuile<br />
+        <span class="text-brique-500">sur cette page.</span>
+      </h1>
+
+      <p class="text-xl text-slate-300 max-w-xl mx-auto mb-4">
+        Le vent a dû l'emporter… Rassurez-vous, chez nous les tuiles restent en place&nbsp;:
+        c'est uniquement cette page qui fuit.
+      </p>
+      <p class="text-slate-400 max-w-xl mx-auto mb-10">
+        L'adresse saisie n'existe pas ou a été déplacée.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center gap-2 bg-brique-500 hover:bg-brique-600 text-ardoise-950 font-bold px-8 py-4 rounded-full text-lg transition-colors shadow-lg"
+        >
+          Retour à l'accueil
+        </a>
+        <a
+          href="/blog"
+          class="inline-flex items-center justify-center gap-2 border-2 border-white/60 text-white hover:bg-white hover:text-ardoise-950 font-semibold px-8 py-4 rounded-full text-lg transition-colors"
+        >
+          Lire nos conseils
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

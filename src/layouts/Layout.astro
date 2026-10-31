@@ -11,6 +11,7 @@ interface Props {
   image?:               string;
   typeOg?:              'website' | 'article';
   donneesStructurees?:  object[];
+  indexable?:           boolean;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   image = IMAGE_DEFAUT,
   typeOg = 'website',
   donneesStructurees = [],
+  indexable = true,
 } = Astro.props;
 
 const titreComplet  = titre === NOM_SITE ? titre : `${titre} | ${NOM_SITE}`;
@@ -33,13 +35,13 @@ const urlImage      = new URL(image, Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="canonical" href={urlCanonique} />
+    {indexable && <link rel="canonical" href={urlCanonique} />}
     <meta name="generator" content={Astro.generator} />
 
     <!-- SEO principal -->
     <title>{titreComplet}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={indexable ? 'index, follow' : 'noindex, follow'} />
 
     <!-- Open Graph -->
     <meta property="og:type"        content={typeOg} />
